@@ -21,12 +21,25 @@ class MainActivity : AppCompatActivity() {
         goButton = findViewById(R.id.goButton)
         webView = findViewById(R.id.webView)
 
+        webView.settings.javaScriptEnabled = true
+
+        goButton.setOnClickListener {
+            val url = fixUrl(urlEditText.text.toString())
+            urlEditText.setText(url)
+            webView.loadUrl(url)
+        }
+
         // Allow your browser to intercept hyperlink clicks
         webView.webViewClient = object: WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
             }
         }
-
+    }
+    private fun fixUrl(url: String): String {
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            return url
+        }
+        return "https://$url"
     }
 }
